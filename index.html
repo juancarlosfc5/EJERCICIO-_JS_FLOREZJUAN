@@ -82,6 +82,70 @@
       '@': '.--.-.'
     };
 
+    // Función para traducir texto a código Morse
+    function textToMorse(text) {
+      text = text.toUpperCase();
+      let morseCode = '';
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+
+        if (char === ' ') {
+          morseCode += '/ '; // Separar palabras con barra inclinada incluyendo espacio
+        } else if (morseCodeTable[char]) {
+          morseCode += morseCodeTable[char] + ' '; // Separar letras incluyendo espacio
+        } else {
+          return `Error: El carácter "${char}" no está soportado.`;
+        }
+      }
+
+      return morseCode.trim(); // Imprime el resultado de la traducción eliminando espacio extra al final de la frase
+    }
+
+    // Función para traducir código Morse a texto
+    function morseToText(morse) {
+      // Primero, separa las palabras de la frase identificando la barra inclinada (/)
+      const words = morse.split(' / ');
+      let text = '';
+
+      // Luego, procesa cada palabra por separado
+      for (let i = 0; i < words.length; i++) {
+        const morseArr = words[i].split(' '); // Separar las letras de la palabra identificando el espacio ( )
+        for (let j = 0; j < morseArr.length; j++) {
+          const char = Object.keys(morseCodeTable).find(key => morseCodeTable[key] === morseArr[j]);
+          if (char) {
+            text += char;
+          } else {
+            return `Error: El código Morse "${morseArr[j]}" no está soportado.`;
+          }
+        }
+        if (i < words.length - 1) {
+          text += ' '; // Agregar un espacio entre cada palabra
+        }
+      }
+
+      return text; // Imprime el resultado de la traducción
+    }
+
+    // Función para ejecutar la traducción desde la consola
+    function translate(input, type) {
+      if (type === 'textToMorse') {
+        console.log(textToMorse(input));
+      } else if (type === 'morseToText') {
+        console.log(morseToText(input));
+      } else {
+        console.log('Error: Tipo de traducción no válido. Usa "textToMorse" o "morseToText".');
+      }
+    }
+
+    // Instrucciones para el usuario en la consola
+    console.log('Traductor de Código Morse');
+    console.log('Para traducir de texto a Morse, usa: translate("Texto a traducir", "textToMorse")');
+    console.log('Para traducir de Morse a texto, usa: translate("Código Morse a traducir", "morseToText")');
+    console.log('Ejemplo:');
+    console.log('translate("Hola Mundo", "textToMorse")');
+    console.log('translate(".--- --- ... . / - . .-. -.-. ---", "morseToText")');
+    
   </script>
 </body>
 
